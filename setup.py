@@ -61,7 +61,7 @@ setup(
     author_email="snakecharmers@ethereum.org",
     url="https://github.com/ethereum/hexbytes",
     include_package_data=True,
-    install_requires=[f"hexbytes=={version}"],
+    install_requires=[f"hexbytes=={version}", "mypy_extensions"],
     python_requires=">=3.9, <4",
     extras_require=extras_require,
     py_modules=["faster_hexbytes"],

@@ -1,3 +1,680 @@
+def to_bytes(val):
+    val :: union[bytes, str, object, bool, int]
+    r0 :: bit
+    r1 :: bytes
+    r2 :: bit
+    r3 :: str
+    r4 :: bytes
+    r5 :: bit
+    r6 :: object
+    r7 :: object[1]
+    r8 :: object_ptr
+    r9 :: object
+    r10 :: bytes
+    r11 :: bit
+    r12 :: bool
+    r13, r14, r15 :: bytes
+    r16 :: bit
+    r17 :: int
+    r18 :: native_int
+    r19 :: bit
+    r20 :: native_int
+    r21, r22 :: bit
+    r23 :: bool
+    r24 :: bit
+    r25 :: str
+    r26 :: int
+    r27, r28, r29 :: str
+    r30 :: object
+    r31 :: str
+    r32 :: object
+    r33 :: object[1]
+    r34 :: object_ptr
+    r35 :: object
+    r36 :: int
+    r37 :: object
+    r38 :: str
+    r39, r40 :: object
+    r41 :: object[1]
+    r42 :: object_ptr
+    r43 :: object
+    r44 :: str
+    r45 :: bytes
+    r46 :: object
+    r47 :: str
+    r48 :: object
+    r49 :: i32
+    r50 :: bit
+    r51 :: bool
+    r52 :: object
+    r53 :: object[1]
+    r54 :: object_ptr
+    r55 :: object
+    r56 :: bytes
+    r57, r58, r59, r60, r61 :: str
+    r62 :: object[3]
+    r63 :: object_ptr
+    r64 :: object
+    r65, r66 :: str
+    r67 :: object
+    r68, r69 :: str
+    r70 :: object[3]
+    r71 :: object_ptr
+    r72 :: object
+    r73 :: str
+    r74 :: list
+    r75, r76, r77, r78, r79, r80 :: ptr
+    r81 :: str
+    r82 :: object
+    r83 :: str
+    r84 :: object
+    r85 :: object[1]
+    r86 :: object_ptr
+    r87 :: object
+    r88 :: bytes
+L0:
+    r0 = PyBytes_Check(val)
+    if r0 goto L1 else goto L3 :: bool
+L1:
+    inc_ref val
+    r1 = cast(bytes, val)
+    if is_error(r1) goto L51 (error at to_bytes:19) else goto L2
+L2:
+    return r1
+L3:
+    r2 = PyUnicode_Check(val)
+    if r2 goto L4 else goto L7 :: bool
+L4:
+    inc_ref val
+    r3 = cast(str, val)
+    if is_error(r3) goto L51 (error at to_bytes:21) else goto L5
+L5:
+    r4 = hexstr_to_bytes(r3)
+    dec_ref r3
+    if is_error(r4) goto L51 (error at to_bytes:21) else goto L6
+L6:
+    return r4
+L7:
+    r5 = PyByteArray_Check(val)
+    if r5 goto L8 else goto L11 :: bool
+L8:
+    r6 = load_address PyBytes_Type
+    r7 = [val]
+    r8 = load_address r7
+    r9 = PyObject_Vectorcall(r6, r8, 1, 0)
+    if is_error(r9) goto L51 (error at to_bytes:23) else goto L9
+L9:
+    r10 = cast(bytes, r9)
+    if is_error(r10) goto L51 (error at to_bytes:23) else goto L10
+L10:
+    return r10
+L11:
+    r11 = PyBool_Check(val)
+    if r11 goto L12 else goto L17 :: bool
+L12:
+    r12 = unbox(bool, val)
+    if is_error(r12) goto L51 (error at to_bytes:25) else goto L13
+L13:
+    if r12 goto L14 else goto L15 :: bool
+L14:
+    r13 = b'\x01'
+    inc_ref r13
+    r14 = r13
+    goto L16
+L15:
+    r15 = b'\x00'
+    inc_ref r15
+    r14 = r15
+L16:
+    return r14
+L17:
+    r16 = PyLong_Check(val)
+    if r16 goto L18 else goto L37 :: bool
+L18:
+    r17 = unbox(int, val)
+    if is_error(r17) goto L51 (error at to_bytes:29) else goto L19
+L19:
+    r18 = r17 & 1
+    r19 = r18 != 0
+    if r19 goto L21 else goto L20 :: bool
+L20:
+    r20 = 0 & 1
+    r21 = r20 != 0
+    if r21 goto L21 else goto L22 :: bool
+L21:
+    r22 = CPyTagged_IsLt_(r17, 0)
+    r23 = r22
+    goto L23
+L22:
+    r24 = r17 < 0 :: signed
+    r23 = r24
+L23:
+    dec_ref r17 :: int
+    if r23 goto L24 else goto L31 :: bool
+L24:
+    r25 = 'Cannot convert negative integer '
+    r26 = unbox(int, val)
+    if is_error(r26) goto L51 (error at to_bytes:30) else goto L25
+L25:
+    r27 = CPyTagged_Str(r26)
+    dec_ref r26 :: int
+    if is_error(r27) goto L51 (error at to_bytes:30) else goto L26
+L26:
+    r28 = ' to bytes'
+    r29 = CPyStr_Build(3, r25, r27, r28)
+    dec_ref r27
+    if is_error(r29) goto L51 (error at to_bytes:30) else goto L27
+L27:
+    r30 = builtins :: module
+    r31 = 'ValueError'
+    r32 = CPyObject_GetAttr(r30, r31)
+    if is_error(r32) goto L52 (error at to_bytes:30) else goto L28
+L28:
+    r33 = [r29]
+    r34 = load_address r33
+    r35 = PyObject_Vectorcall(r32, r34, 1, 0)
+    dec_ref r32
+    if is_error(r35) goto L52 (error at to_bytes:30) else goto L29
+L29:
+    dec_ref r29
+    CPy_Raise(r35)
+    dec_ref r35
+    if not 0 goto L51 (error at to_bytes:30) else goto L30 :: bool
+L30:
+    unreachable
+L31:
+    r36 = unbox(int, val)
+    if is_error(r36) goto L51 (error at to_bytes:32) else goto L32
+L32:
+    r37 = builtins :: module
+    r38 = 'hex'
+    r39 = CPyObject_GetAttr(r37, r38)
+    if is_error(r39) goto L53 (error at to_bytes:32) else goto L33
+L33:
+    r40 = box(int, r36)
+    r41 = [r40]
+    r42 = load_address r41
+    r43 = PyObject_Vectorcall(r39, r42, 1, 0)
+    dec_ref r39
+    if is_error(r43) goto L54 (error at to_bytes:32) else goto L34
+L34:
+    dec_ref r40
+    r44 = cast(str, r43)
+    if is_error(r44) goto L51 (error at to_bytes:32) else goto L35
+L35:
+    r45 = to_bytes(r44)
+    dec_ref r44
+    if is_error(r45) goto L51 (error at to_bytes:32) else goto L36
+L36:
+    return r45
+L37:
+    r46 = builtins :: module
+    r47 = 'memoryview'
+    r48 = CPyObject_GetAttr(r46, r47)
+    if is_error(r48) goto L51 (error at to_bytes:33) else goto L38
+L38:
+    r49 = PyObject_IsInstance(val, r48)
+    dec_ref r48
+    r50 = r49 >= 0 :: signed
+    if not r50 goto L51 (error at to_bytes:33) else goto L39 :: bool
+L39:
+    r51 = truncate r49: i32 to builtins.bool
+    if r51 goto L40 else goto L43 :: bool
+L40:
+    r52 = load_address PyBytes_Type
+    r53 = [val]
+    r54 = load_address r53
+    r55 = PyObject_Vectorcall(r52, r54, 1, 0)
+    if is_error(r55) goto L51 (error at to_bytes:34) else goto L41
+L41:
+    r56 = cast(bytes, r55)
+    if is_error(r56) goto L51 (error at to_bytes:34) else goto L42
+L42:
+    return r56
+L43:
+    r57 = ''
+    r58 = 'Cannot convert '
+    r59 = '{!r:{}}'
+    r60 = ''
+    r61 = 'format'
+    r62 = [r59, val, r60]
+    r63 = load_address r62
+    r64 = PyObject_VectorcallMethod(r61, r63, 9223372036854775811, 0)
+    if is_error(r64) goto L51 (error at to_bytes:36) else goto L44
+L44:
+    r65 = ' of type '
+    r66 = '{:{}}'
+    r67 = CPy_TYPE(val)
+    r68 = ''
+    r69 = 'format'
+    r70 = [r66, r67, r68]
+    r71 = load_address r70
+    r72 = PyObject_VectorcallMethod(r69, r71, 9223372036854775811, 0)
+    if is_error(r72) goto L55 (error at to_bytes:36) else goto L45
+L45:
+    dec_ref r67
+    r73 = ' to bytes'
+    r74 = PyList_New(5)
+    if is_error(r74) goto L56 (error at to_bytes:36) else goto L46
+L46:
+    r75 = get_element_ptr r74 ob_item :: PyListObject
+    r76 = load_mem r75 :: ptr*
+    inc_ref r58
+    set_mem r76, r58 :: builtins.object*
+    r77 = r76 + 8
+    set_mem r77, r64 :: builtins.object*
+    inc_ref r65
+    r78 = r76 + 16
+    set_mem r78, r65 :: builtins.object*
+    r79 = r76 + 24
+    set_mem r79, r72 :: builtins.object*
+    inc_ref r73
+    r80 = r76 + 32
+    set_mem r80, r73 :: builtins.object*
+    r81 = PyUnicode_Join(r57, r74)
+    dec_ref r74
+    if is_error(r81) goto L51 (error at to_bytes:36) else goto L47
+L47:
+    r82 = builtins :: module
+    r83 = 'TypeError'
+    r84 = CPyObject_GetAttr(r82, r83)
+    if is_error(r84) goto L57 (error at to_bytes:36) else goto L48
+L48:
+    r85 = [r81]
+    r86 = load_address r85
+    r87 = PyObject_Vectorcall(r84, r86, 1, 0)
+    dec_ref r84
+    if is_error(r87) goto L57 (error at to_bytes:36) else goto L49
+L49:
+    dec_ref r81
+    CPy_Raise(r87)
+    dec_ref r87
+    if not 0 goto L51 (error at to_bytes:36) else goto L50 :: bool
+L50:
+    unreachable
+L51:
+    r88 = <error> :: bytes
+    return r88
+L52:
+    dec_ref r29
+    goto L51
+L53:
+    dec_ref r36 :: int
+    goto L51
+L54:
+    dec_ref r40
+    goto L51
+L55:
+    dec_ref r64
+    dec_ref r67
+    goto L51
+L56:
+    dec_ref r64
+    dec_ref r72
+    goto L51
+L57:
+    dec_ref r81
+    goto L51
+
+def hexstr_to_bytes(hexstr):
+    hexstr, r0, r1 :: str
+    r2 :: tuple[str, str]
+    r3 :: object
+    r4 :: bool
+    r5 :: object
+    r6, non_prefixed_hex :: str
+    r7 :: native_int
+    r8 :: bit
+    r9 :: short_int
+    r10 :: int
+    r11 :: bit
+    r12, r13, padded_hex :: str
+    r14 :: bytes
+    r15 :: tuple[object, object, object]
+    r16 :: object
+    r17 :: str
+    r18 :: object
+    r19 :: bit
+    r20, r21, r22 :: str
+    r23 :: object
+    r24 :: str
+    r25 :: object
+    r26 :: object[1]
+    r27 :: object_ptr
+    r28 :: object
+    r29 :: bit
+    r30 :: object
+    r31 :: bool
+    r32 :: object[1]
+    r33 :: object_ptr
+    r34 :: object
+    r35, r36 :: bytes
+L0:
+    r0 = '0x'
+    r1 = '0X'
+    inc_ref r0
+    inc_ref r1
+    r2 = (r0, r1)
+    r3 = box(tuple[str, str], r2)
+    r4 = CPyStr_Startswith(hexstr, r3)
+    dec_ref r3
+    if is_error(r4) goto L31 (error at hexstr_to_bytes:40) else goto L1
+L1:
+    if r4 goto L2 else goto L5 :: bool
+L2:
+    r5 = CPyStr_GetSlice(hexstr, 4, 9223372036854775806)
+    if is_error(r5) goto L31 (error at hexstr_to_bytes:41) else goto L3
+L3:
+    r6 = cast(str, r5)
+    if is_error(r6) goto L31 (error at hexstr_to_bytes:41) else goto L4
+L4:
+    non_prefixed_hex = r6
+    goto L6
+L5:
+    inc_ref hexstr
+    non_prefixed_hex = hexstr
+L6:
+    r7 = CPyStr_Size_size_t(hexstr)
+    r8 = r7 >= 0 :: signed
+    if not r8 goto L32 (error at hexstr_to_bytes:46) else goto L7 :: bool
+L7:
+    r9 = r7 << 1
+    r10 = CPyTagged_Remainder(r9, 4)
+    if is_error(r10) goto L32 (error at hexstr_to_bytes:46) else goto L8
+L8:
+    r11 = r10 != 0
+    dec_ref r10 :: int
+    if r11 goto L9 else goto L11 :: bool
+L9:
+    r12 = '0'
+    r13 = PyUnicode_Concat(r12, non_prefixed_hex)
+    dec_ref non_prefixed_hex
+    if is_error(r13) goto L31 (error at hexstr_to_bytes:47) else goto L10
+L10:
+    padded_hex = r13
+    goto L12
+L11:
+    padded_hex = non_prefixed_hex
+L12:
+    r14 = PyUnicode_AsASCIIString(padded_hex)
+    if is_error(r14) goto L14 (error at hexstr_to_bytes:52) else goto L33
+L13:
+    goto L25
+L14:
+    r15 = CPy_CatchError()
+    r16 = builtins :: module
+    r17 = 'UnicodeDecodeError'
+    r18 = CPyObject_GetAttr(r16, r17)
+    if is_error(r18) goto L34 (error at hexstr_to_bytes:53) else goto L15
+L15:
+    r19 = CPy_ExceptionMatches(r18)
+    dec_ref r18
+    if r19 goto L16 else goto L35 :: bool
+L16:
+    r20 = 'hex string '
+    r21 = ' may only contain [0-9a-fA-F] characters'
+    r22 = CPyStr_Build(3, r20, padded_hex, r21)
+    dec_ref padded_hex
+    if is_error(r22) goto L23 (error at hexstr_to_bytes:55) else goto L17
+L17:
+    r23 = builtins :: module
+    r24 = 'ValueError'
+    r25 = CPyObject_GetAttr(r23, r24)
+    if is_error(r25) goto L36 (error at hexstr_to_bytes:54) else goto L18
+L18:
+    r26 = [r22]
+    r27 = load_address r26
+    r28 = PyObject_Vectorcall(r25, r27, 1, 0)
+    dec_ref r25
+    if is_error(r28) goto L36 (error at hexstr_to_bytes:54) else goto L19
+L19:
+    dec_ref r22
+    CPy_Raise(r28)
+    dec_ref r28
+    if not 0 goto L23 (error at hexstr_to_bytes:54) else goto L37 :: bool
+L20:
+    unreachable
+L21:
+    CPy_Reraise()
+    if not 0 goto L23 else goto L38 :: bool
+L22:
+    unreachable
+L23:
+    CPy_RestoreExcInfo(r15)
+    dec_ref r15
+    r29 = CPy_KeepPropagating()
+    if not r29 goto L31 else goto L24 :: bool
+L24:
+    unreachable
+L25:
+    r30 = faster_hexbytes._utils.unhexlify :: static
+    if is_error(r30) goto L39 else goto L28
+L26:
+    r31 = raise NameError('value for final name "unhexlify" was not set')
+    if not r31 goto L31 (error at hexstr_to_bytes:58) else goto L27 :: bool
+L27:
+    unreachable
+L28:
+    r32 = [r14]
+    r33 = load_address r32
+    r34 = PyObject_Vectorcall(r30, r33, 1, 0)
+    if is_error(r34) goto L40 (error at hexstr_to_bytes:58) else goto L29
+L29:
+    dec_ref r14
+    r35 = cast(bytes, r34)
+    if is_error(r35) goto L31 (error at hexstr_to_bytes:58) else goto L30
+L30:
+    return r35
+L31:
+    r36 = <error> :: bytes
+    return r36
+L32:
+    dec_ref non_prefixed_hex
+    goto L31
+L33:
+    dec_ref padded_hex
+    goto L13
+L34:
+    dec_ref padded_hex
+    goto L23
+L35:
+    dec_ref padded_hex
+    goto L21
+L36:
+    dec_ref r22
+    goto L23
+L37:
+    dec_ref r15
+    goto L20
+L38:
+    dec_ref r15
+    goto L22
+L39:
+    dec_ref r14
+    goto L26
+L40:
+    dec_ref r14
+    goto L31
+
+def __top_level__():
+    r0, r1 :: object
+    r2 :: bit
+    r3 :: str
+    r4 :: object
+    r5 :: object_ptr
+    r6 :: object_ptr[1]
+    r7 :: c_ptr
+    r8 :: native_int[1]
+    r9 :: c_ptr
+    r10 :: object
+    r11 :: dict
+    r12, r13 :: str
+    r14 :: bit
+    r15 :: object
+    r16 :: str
+    r17 :: dict
+    r18, r19 :: object
+    r20 :: str
+    r21 :: object
+    r22 :: dict
+    r23 :: str
+    r24 :: i32
+    r25 :: bit
+    r26 :: None
+L0:
+    r0 = builtins :: module
+    r1 = load_address _Py_NoneStruct
+    r2 = r0 != r1
+    if r2 goto L3 else goto L1 :: bool
+L1:
+    r3 = 'builtins'
+    r4 = PyImport_Import(r3)
+    if is_error(r4) goto L8 (error at <module>:-1) else goto L2
+L2:
+    builtins = r4 :: module
+    dec_ref r4
+L3:
+    r5 = load_address binascii :: module
+    r6 = [r5]
+    r7 = load_address r6
+    r8 = [1]
+    r9 = load_address r8
+    r10 = (('binascii', 'binascii', 'binascii'),)
+    r11 = faster_hexbytes._utils.globals :: static
+    r12 = 'faster_hexbytes/_utils.py'
+    r13 = '<module>'
+    r14 = CPyImport_ImportMany(r10, r7, r11, r12, r13, r9)
+    if not r14 goto L8 else goto L4 :: bool
+L4:
+    r15 = ('Final', 'Union')
+    r16 = 'typing'
+    r17 = faster_hexbytes._utils.globals :: static
+    r18 = CPyImport_ImportFromMany(r16, r15, r15, r17)
+    if is_error(r18) goto L8 (error at <module>:2) else goto L5
+L5:
+    typing = r18 :: module
+    dec_ref r18
+    r19 = binascii :: module
+    r20 = 'unhexlify'
+    r21 = CPyObject_GetAttr(r19, r20)
+    if is_error(r21) goto L8 (error at <module>:8) else goto L6
+L6:
+    faster_hexbytes._utils.unhexlify = r21 :: static
+    r22 = faster_hexbytes._utils.globals :: static
+    r23 = 'unhexlify'
+    r24 = CPyDict_SetItem(r22, r23, r21)
+    dec_ref r21
+    r25 = r24 >= 0 :: signed
+    if not r25 goto L8 (error at <module>:8) else goto L7 :: bool
+L7:
+    return 1
+L8:
+    r26 = <error> :: None
+    return r26
+
+def __top_level__():
+    r0, r1 :: object
+    r2 :: bit
+    r3 :: str
+    r4, r5, r6 :: object
+    r7 :: str
+    r8 :: dict
+    r9, r10 :: object
+    r11 :: str
+    r12 :: dict
+    r13 :: object
+    r14 :: str
+    r15 :: list
+    r16, r17 :: ptr
+    r18 :: dict
+    r19 :: str
+    r20 :: i32
+    r21 :: bit
+    r22 :: str
+    r23 :: dict
+    r24 :: str
+    r25 :: object
+    r26 :: object[1]
+    r27 :: object_ptr
+    r28 :: object
+    r29 :: str
+    r30 :: dict
+    r31 :: str
+    r32 :: i32
+    r33 :: bit
+    r34 :: None
+L0:
+    r0 = builtins :: module
+    r1 = load_address _Py_NoneStruct
+    r2 = r0 != r1
+    if r2 goto L3 else goto L1 :: bool
+L1:
+    r3 = 'builtins'
+    r4 = PyImport_Import(r3)
+    if is_error(r4) goto L12 (error at <module>:-1) else goto L2
+L2:
+    builtins = r4 :: module
+    dec_ref r4
+L3:
+    r5 = ('version',)
+    r6 = ('__version',)
+    r7 = 'importlib.metadata'
+    r8 = faster_hexbytes.globals :: static
+    r9 = CPyImport_ImportFromMany(r7, r5, r6, r8)
+    if is_error(r9) goto L12 (error at <module>:1) else goto L4
+L4:
+    importlib.metadata = r9 :: module
+    dec_ref r9
+    r10 = ('HexBytes',)
+    r11 = 'faster_hexbytes.main'
+    r12 = faster_hexbytes.globals :: static
+    r13 = CPyImport_ImportFromMany(r11, r10, r10, r12)
+    if is_error(r13) goto L12 (error at <module>:5) else goto L5
+L5:
+    faster_hexbytes.main = r13 :: module
+    dec_ref r13
+    r14 = 'HexBytes'
+    r15 = PyList_New(1)
+    if is_error(r15) goto L12 (error at <module>:9) else goto L6
+L6:
+    r16 = get_element_ptr r15 ob_item :: PyListObject
+    r17 = load_mem r16 :: ptr*
+    inc_ref r14
+    set_mem r17, r14 :: builtins.object*
+    r18 = faster_hexbytes.globals :: static
+    r19 = '__all__'
+    r20 = CPyDict_SetItem(r18, r19, r15)
+    dec_ref r15
+    r21 = r20 >= 0 :: signed
+    if not r21 goto L12 (error at <module>:9) else goto L7 :: bool
+L7:
+    r22 = 'hexbytes'
+    r23 = faster_hexbytes.globals :: static
+    r24 = '__version'
+    r25 = CPyDict_GetItem(r23, r24)
+    if is_error(r25) goto L12 (error at <module>:11) else goto L8
+L8:
+    r26 = [r22]
+    r27 = load_address r26
+    r28 = PyObject_Vectorcall(r25, r27, 1, 0)
+    dec_ref r25
+    if is_error(r28) goto L12 (error at <module>:11) else goto L9
+L9:
+    r29 = cast(str, r28)
+    if is_error(r29) goto L12 (error at <module>:11) else goto L10
+L10:
+    r30 = faster_hexbytes.globals :: static
+    r31 = '__version__'
+    r32 = CPyDict_SetItem(r30, r31, r29)
+    dec_ref r29
+    r33 = r32 >= 0 :: signed
+    if not r33 goto L12 (error at <module>:11) else goto L11 :: bool
+L11:
+    return 1
+L12:
+    r34 = <error> :: None
+    return r34
+
 def __new___HexBytes_obj.__get__(__mypyc_self__, instance, owner):
     __mypyc_self__, instance, owner, r0 :: object
     r1 :: bit
@@ -744,680 +1421,3 @@ L54:
 L55:
     dec_ref r116
     goto L48
-
-def __top_level__():
-    r0, r1 :: object
-    r2 :: bit
-    r3 :: str
-    r4, r5, r6 :: object
-    r7 :: str
-    r8 :: dict
-    r9, r10 :: object
-    r11 :: str
-    r12 :: dict
-    r13 :: object
-    r14 :: str
-    r15 :: list
-    r16, r17 :: ptr
-    r18 :: dict
-    r19 :: str
-    r20 :: i32
-    r21 :: bit
-    r22 :: str
-    r23 :: dict
-    r24 :: str
-    r25 :: object
-    r26 :: object[1]
-    r27 :: object_ptr
-    r28 :: object
-    r29 :: str
-    r30 :: dict
-    r31 :: str
-    r32 :: i32
-    r33 :: bit
-    r34 :: None
-L0:
-    r0 = builtins :: module
-    r1 = load_address _Py_NoneStruct
-    r2 = r0 != r1
-    if r2 goto L3 else goto L1 :: bool
-L1:
-    r3 = 'builtins'
-    r4 = PyImport_Import(r3)
-    if is_error(r4) goto L12 (error at <module>:-1) else goto L2
-L2:
-    builtins = r4 :: module
-    dec_ref r4
-L3:
-    r5 = ('version',)
-    r6 = ('__version',)
-    r7 = 'importlib.metadata'
-    r8 = faster_hexbytes.globals :: static
-    r9 = CPyImport_ImportFromMany(r7, r5, r6, r8)
-    if is_error(r9) goto L12 (error at <module>:1) else goto L4
-L4:
-    importlib.metadata = r9 :: module
-    dec_ref r9
-    r10 = ('HexBytes',)
-    r11 = 'faster_hexbytes.main'
-    r12 = faster_hexbytes.globals :: static
-    r13 = CPyImport_ImportFromMany(r11, r10, r10, r12)
-    if is_error(r13) goto L12 (error at <module>:5) else goto L5
-L5:
-    faster_hexbytes.main = r13 :: module
-    dec_ref r13
-    r14 = 'HexBytes'
-    r15 = PyList_New(1)
-    if is_error(r15) goto L12 (error at <module>:9) else goto L6
-L6:
-    r16 = get_element_ptr r15 ob_item :: PyListObject
-    r17 = load_mem r16 :: ptr*
-    inc_ref r14
-    set_mem r17, r14 :: builtins.object*
-    r18 = faster_hexbytes.globals :: static
-    r19 = '__all__'
-    r20 = CPyDict_SetItem(r18, r19, r15)
-    dec_ref r15
-    r21 = r20 >= 0 :: signed
-    if not r21 goto L12 (error at <module>:9) else goto L7 :: bool
-L7:
-    r22 = 'hexbytes'
-    r23 = faster_hexbytes.globals :: static
-    r24 = '__version'
-    r25 = CPyDict_GetItem(r23, r24)
-    if is_error(r25) goto L12 (error at <module>:11) else goto L8
-L8:
-    r26 = [r22]
-    r27 = load_address r26
-    r28 = PyObject_Vectorcall(r25, r27, 1, 0)
-    dec_ref r25
-    if is_error(r28) goto L12 (error at <module>:11) else goto L9
-L9:
-    r29 = cast(str, r28)
-    if is_error(r29) goto L12 (error at <module>:11) else goto L10
-L10:
-    r30 = faster_hexbytes.globals :: static
-    r31 = '__version__'
-    r32 = CPyDict_SetItem(r30, r31, r29)
-    dec_ref r29
-    r33 = r32 >= 0 :: signed
-    if not r33 goto L12 (error at <module>:11) else goto L11 :: bool
-L11:
-    return 1
-L12:
-    r34 = <error> :: None
-    return r34
-
-def to_bytes(val):
-    val :: union[bytes, str, object, bool, int]
-    r0 :: bit
-    r1 :: bytes
-    r2 :: bit
-    r3 :: str
-    r4 :: bytes
-    r5 :: bit
-    r6 :: object
-    r7 :: object[1]
-    r8 :: object_ptr
-    r9 :: object
-    r10 :: bytes
-    r11 :: bit
-    r12 :: bool
-    r13, r14, r15 :: bytes
-    r16 :: bit
-    r17 :: int
-    r18 :: native_int
-    r19 :: bit
-    r20 :: native_int
-    r21, r22 :: bit
-    r23 :: bool
-    r24 :: bit
-    r25 :: str
-    r26 :: int
-    r27, r28, r29 :: str
-    r30 :: object
-    r31 :: str
-    r32 :: object
-    r33 :: object[1]
-    r34 :: object_ptr
-    r35 :: object
-    r36 :: int
-    r37 :: object
-    r38 :: str
-    r39, r40 :: object
-    r41 :: object[1]
-    r42 :: object_ptr
-    r43 :: object
-    r44 :: str
-    r45 :: bytes
-    r46 :: object
-    r47 :: str
-    r48 :: object
-    r49 :: i32
-    r50 :: bit
-    r51 :: bool
-    r52 :: object
-    r53 :: object[1]
-    r54 :: object_ptr
-    r55 :: object
-    r56 :: bytes
-    r57, r58, r59, r60, r61 :: str
-    r62 :: object[3]
-    r63 :: object_ptr
-    r64 :: object
-    r65, r66 :: str
-    r67 :: object
-    r68, r69 :: str
-    r70 :: object[3]
-    r71 :: object_ptr
-    r72 :: object
-    r73 :: str
-    r74 :: list
-    r75, r76, r77, r78, r79, r80 :: ptr
-    r81 :: str
-    r82 :: object
-    r83 :: str
-    r84 :: object
-    r85 :: object[1]
-    r86 :: object_ptr
-    r87 :: object
-    r88 :: bytes
-L0:
-    r0 = PyBytes_Check(val)
-    if r0 goto L1 else goto L3 :: bool
-L1:
-    inc_ref val
-    r1 = cast(bytes, val)
-    if is_error(r1) goto L51 (error at to_bytes:19) else goto L2
-L2:
-    return r1
-L3:
-    r2 = PyUnicode_Check(val)
-    if r2 goto L4 else goto L7 :: bool
-L4:
-    inc_ref val
-    r3 = cast(str, val)
-    if is_error(r3) goto L51 (error at to_bytes:21) else goto L5
-L5:
-    r4 = hexstr_to_bytes(r3)
-    dec_ref r3
-    if is_error(r4) goto L51 (error at to_bytes:21) else goto L6
-L6:
-    return r4
-L7:
-    r5 = PyByteArray_Check(val)
-    if r5 goto L8 else goto L11 :: bool
-L8:
-    r6 = load_address PyBytes_Type
-    r7 = [val]
-    r8 = load_address r7
-    r9 = PyObject_Vectorcall(r6, r8, 1, 0)
-    if is_error(r9) goto L51 (error at to_bytes:23) else goto L9
-L9:
-    r10 = cast(bytes, r9)
-    if is_error(r10) goto L51 (error at to_bytes:23) else goto L10
-L10:
-    return r10
-L11:
-    r11 = PyBool_Check(val)
-    if r11 goto L12 else goto L17 :: bool
-L12:
-    r12 = unbox(bool, val)
-    if is_error(r12) goto L51 (error at to_bytes:25) else goto L13
-L13:
-    if r12 goto L14 else goto L15 :: bool
-L14:
-    r13 = b'\x01'
-    inc_ref r13
-    r14 = r13
-    goto L16
-L15:
-    r15 = b'\x00'
-    inc_ref r15
-    r14 = r15
-L16:
-    return r14
-L17:
-    r16 = PyLong_Check(val)
-    if r16 goto L18 else goto L37 :: bool
-L18:
-    r17 = unbox(int, val)
-    if is_error(r17) goto L51 (error at to_bytes:29) else goto L19
-L19:
-    r18 = r17 & 1
-    r19 = r18 != 0
-    if r19 goto L21 else goto L20 :: bool
-L20:
-    r20 = 0 & 1
-    r21 = r20 != 0
-    if r21 goto L21 else goto L22 :: bool
-L21:
-    r22 = CPyTagged_IsLt_(r17, 0)
-    r23 = r22
-    goto L23
-L22:
-    r24 = r17 < 0 :: signed
-    r23 = r24
-L23:
-    dec_ref r17 :: int
-    if r23 goto L24 else goto L31 :: bool
-L24:
-    r25 = 'Cannot convert negative integer '
-    r26 = unbox(int, val)
-    if is_error(r26) goto L51 (error at to_bytes:30) else goto L25
-L25:
-    r27 = CPyTagged_Str(r26)
-    dec_ref r26 :: int
-    if is_error(r27) goto L51 (error at to_bytes:30) else goto L26
-L26:
-    r28 = ' to bytes'
-    r29 = CPyStr_Build(3, r25, r27, r28)
-    dec_ref r27
-    if is_error(r29) goto L51 (error at to_bytes:30) else goto L27
-L27:
-    r30 = builtins :: module
-    r31 = 'ValueError'
-    r32 = CPyObject_GetAttr(r30, r31)
-    if is_error(r32) goto L52 (error at to_bytes:30) else goto L28
-L28:
-    r33 = [r29]
-    r34 = load_address r33
-    r35 = PyObject_Vectorcall(r32, r34, 1, 0)
-    dec_ref r32
-    if is_error(r35) goto L52 (error at to_bytes:30) else goto L29
-L29:
-    dec_ref r29
-    CPy_Raise(r35)
-    dec_ref r35
-    if not 0 goto L51 (error at to_bytes:30) else goto L30 :: bool
-L30:
-    unreachable
-L31:
-    r36 = unbox(int, val)
-    if is_error(r36) goto L51 (error at to_bytes:32) else goto L32
-L32:
-    r37 = builtins :: module
-    r38 = 'hex'
-    r39 = CPyObject_GetAttr(r37, r38)
-    if is_error(r39) goto L53 (error at to_bytes:32) else goto L33
-L33:
-    r40 = box(int, r36)
-    r41 = [r40]
-    r42 = load_address r41
-    r43 = PyObject_Vectorcall(r39, r42, 1, 0)
-    dec_ref r39
-    if is_error(r43) goto L54 (error at to_bytes:32) else goto L34
-L34:
-    dec_ref r40
-    r44 = cast(str, r43)
-    if is_error(r44) goto L51 (error at to_bytes:32) else goto L35
-L35:
-    r45 = to_bytes(r44)
-    dec_ref r44
-    if is_error(r45) goto L51 (error at to_bytes:32) else goto L36
-L36:
-    return r45
-L37:
-    r46 = builtins :: module
-    r47 = 'memoryview'
-    r48 = CPyObject_GetAttr(r46, r47)
-    if is_error(r48) goto L51 (error at to_bytes:33) else goto L38
-L38:
-    r49 = PyObject_IsInstance(val, r48)
-    dec_ref r48
-    r50 = r49 >= 0 :: signed
-    if not r50 goto L51 (error at to_bytes:33) else goto L39 :: bool
-L39:
-    r51 = truncate r49: i32 to builtins.bool
-    if r51 goto L40 else goto L43 :: bool
-L40:
-    r52 = load_address PyBytes_Type
-    r53 = [val]
-    r54 = load_address r53
-    r55 = PyObject_Vectorcall(r52, r54, 1, 0)
-    if is_error(r55) goto L51 (error at to_bytes:34) else goto L41
-L41:
-    r56 = cast(bytes, r55)
-    if is_error(r56) goto L51 (error at to_bytes:34) else goto L42
-L42:
-    return r56
-L43:
-    r57 = ''
-    r58 = 'Cannot convert '
-    r59 = '{!r:{}}'
-    r60 = ''
-    r61 = 'format'
-    r62 = [r59, val, r60]
-    r63 = load_address r62
-    r64 = PyObject_VectorcallMethod(r61, r63, 9223372036854775811, 0)
-    if is_error(r64) goto L51 (error at to_bytes:36) else goto L44
-L44:
-    r65 = ' of type '
-    r66 = '{:{}}'
-    r67 = CPy_TYPE(val)
-    r68 = ''
-    r69 = 'format'
-    r70 = [r66, r67, r68]
-    r71 = load_address r70
-    r72 = PyObject_VectorcallMethod(r69, r71, 9223372036854775811, 0)
-    if is_error(r72) goto L55 (error at to_bytes:36) else goto L45
-L45:
-    dec_ref r67
-    r73 = ' to bytes'
-    r74 = PyList_New(5)
-    if is_error(r74) goto L56 (error at to_bytes:36) else goto L46
-L46:
-    r75 = get_element_ptr r74 ob_item :: PyListObject
-    r76 = load_mem r75 :: ptr*
-    inc_ref r58
-    set_mem r76, r58 :: builtins.object*
-    r77 = r76 + 8
-    set_mem r77, r64 :: builtins.object*
-    inc_ref r65
-    r78 = r76 + 16
-    set_mem r78, r65 :: builtins.object*
-    r79 = r76 + 24
-    set_mem r79, r72 :: builtins.object*
-    inc_ref r73
-    r80 = r76 + 32
-    set_mem r80, r73 :: builtins.object*
-    r81 = PyUnicode_Join(r57, r74)
-    dec_ref r74
-    if is_error(r81) goto L51 (error at to_bytes:36) else goto L47
-L47:
-    r82 = builtins :: module
-    r83 = 'TypeError'
-    r84 = CPyObject_GetAttr(r82, r83)
-    if is_error(r84) goto L57 (error at to_bytes:36) else goto L48
-L48:
-    r85 = [r81]
-    r86 = load_address r85
-    r87 = PyObject_Vectorcall(r84, r86, 1, 0)
-    dec_ref r84
-    if is_error(r87) goto L57 (error at to_bytes:36) else goto L49
-L49:
-    dec_ref r81
-    CPy_Raise(r87)
-    dec_ref r87
-    if not 0 goto L51 (error at to_bytes:36) else goto L50 :: bool
-L50:
-    unreachable
-L51:
-    r88 = <error> :: bytes
-    return r88
-L52:
-    dec_ref r29
-    goto L51
-L53:
-    dec_ref r36 :: int
-    goto L51
-L54:
-    dec_ref r40
-    goto L51
-L55:
-    dec_ref r64
-    dec_ref r67
-    goto L51
-L56:
-    dec_ref r64
-    dec_ref r72
-    goto L51
-L57:
-    dec_ref r81
-    goto L51
-
-def hexstr_to_bytes(hexstr):
-    hexstr, r0, r1 :: str
-    r2 :: tuple[str, str]
-    r3 :: object
-    r4 :: bool
-    r5 :: object
-    r6, non_prefixed_hex :: str
-    r7 :: native_int
-    r8 :: bit
-    r9 :: short_int
-    r10 :: int
-    r11 :: bit
-    r12, r13, padded_hex :: str
-    r14 :: bytes
-    r15 :: tuple[object, object, object]
-    r16 :: object
-    r17 :: str
-    r18 :: object
-    r19 :: bit
-    r20, r21, r22 :: str
-    r23 :: object
-    r24 :: str
-    r25 :: object
-    r26 :: object[1]
-    r27 :: object_ptr
-    r28 :: object
-    r29 :: bit
-    r30 :: object
-    r31 :: bool
-    r32 :: object[1]
-    r33 :: object_ptr
-    r34 :: object
-    r35, r36 :: bytes
-L0:
-    r0 = '0x'
-    r1 = '0X'
-    inc_ref r0
-    inc_ref r1
-    r2 = (r0, r1)
-    r3 = box(tuple[str, str], r2)
-    r4 = CPyStr_Startswith(hexstr, r3)
-    dec_ref r3
-    if is_error(r4) goto L31 (error at hexstr_to_bytes:40) else goto L1
-L1:
-    if r4 goto L2 else goto L5 :: bool
-L2:
-    r5 = CPyStr_GetSlice(hexstr, 4, 9223372036854775806)
-    if is_error(r5) goto L31 (error at hexstr_to_bytes:41) else goto L3
-L3:
-    r6 = cast(str, r5)
-    if is_error(r6) goto L31 (error at hexstr_to_bytes:41) else goto L4
-L4:
-    non_prefixed_hex = r6
-    goto L6
-L5:
-    inc_ref hexstr
-    non_prefixed_hex = hexstr
-L6:
-    r7 = CPyStr_Size_size_t(hexstr)
-    r8 = r7 >= 0 :: signed
-    if not r8 goto L32 (error at hexstr_to_bytes:46) else goto L7 :: bool
-L7:
-    r9 = r7 << 1
-    r10 = CPyTagged_Remainder(r9, 4)
-    if is_error(r10) goto L32 (error at hexstr_to_bytes:46) else goto L8
-L8:
-    r11 = r10 != 0
-    dec_ref r10 :: int
-    if r11 goto L9 else goto L11 :: bool
-L9:
-    r12 = '0'
-    r13 = PyUnicode_Concat(r12, non_prefixed_hex)
-    dec_ref non_prefixed_hex
-    if is_error(r13) goto L31 (error at hexstr_to_bytes:47) else goto L10
-L10:
-    padded_hex = r13
-    goto L12
-L11:
-    padded_hex = non_prefixed_hex
-L12:
-    r14 = PyUnicode_AsASCIIString(padded_hex)
-    if is_error(r14) goto L14 (error at hexstr_to_bytes:52) else goto L33
-L13:
-    goto L25
-L14:
-    r15 = CPy_CatchError()
-    r16 = builtins :: module
-    r17 = 'UnicodeDecodeError'
-    r18 = CPyObject_GetAttr(r16, r17)
-    if is_error(r18) goto L34 (error at hexstr_to_bytes:53) else goto L15
-L15:
-    r19 = CPy_ExceptionMatches(r18)
-    dec_ref r18
-    if r19 goto L16 else goto L35 :: bool
-L16:
-    r20 = 'hex string '
-    r21 = ' may only contain [0-9a-fA-F] characters'
-    r22 = CPyStr_Build(3, r20, padded_hex, r21)
-    dec_ref padded_hex
-    if is_error(r22) goto L23 (error at hexstr_to_bytes:55) else goto L17
-L17:
-    r23 = builtins :: module
-    r24 = 'ValueError'
-    r25 = CPyObject_GetAttr(r23, r24)
-    if is_error(r25) goto L36 (error at hexstr_to_bytes:54) else goto L18
-L18:
-    r26 = [r22]
-    r27 = load_address r26
-    r28 = PyObject_Vectorcall(r25, r27, 1, 0)
-    dec_ref r25
-    if is_error(r28) goto L36 (error at hexstr_to_bytes:54) else goto L19
-L19:
-    dec_ref r22
-    CPy_Raise(r28)
-    dec_ref r28
-    if not 0 goto L23 (error at hexstr_to_bytes:54) else goto L37 :: bool
-L20:
-    unreachable
-L21:
-    CPy_Reraise()
-    if not 0 goto L23 else goto L38 :: bool
-L22:
-    unreachable
-L23:
-    CPy_RestoreExcInfo(r15)
-    dec_ref r15
-    r29 = CPy_KeepPropagating()
-    if not r29 goto L31 else goto L24 :: bool
-L24:
-    unreachable
-L25:
-    r30 = faster_hexbytes._utils.unhexlify :: static
-    if is_error(r30) goto L39 else goto L28
-L26:
-    r31 = raise NameError('value for final name "unhexlify" was not set')
-    if not r31 goto L31 (error at hexstr_to_bytes:58) else goto L27 :: bool
-L27:
-    unreachable
-L28:
-    r32 = [r14]
-    r33 = load_address r32
-    r34 = PyObject_Vectorcall(r30, r33, 1, 0)
-    if is_error(r34) goto L40 (error at hexstr_to_bytes:58) else goto L29
-L29:
-    dec_ref r14
-    r35 = cast(bytes, r34)
-    if is_error(r35) goto L31 (error at hexstr_to_bytes:58) else goto L30
-L30:
-    return r35
-L31:
-    r36 = <error> :: bytes
-    return r36
-L32:
-    dec_ref non_prefixed_hex
-    goto L31
-L33:
-    dec_ref padded_hex
-    goto L13
-L34:
-    dec_ref padded_hex
-    goto L23
-L35:
-    dec_ref padded_hex
-    goto L21
-L36:
-    dec_ref r22
-    goto L23
-L37:
-    dec_ref r15
-    goto L20
-L38:
-    dec_ref r15
-    goto L22
-L39:
-    dec_ref r14
-    goto L26
-L40:
-    dec_ref r14
-    goto L31
-
-def __top_level__():
-    r0, r1 :: object
-    r2 :: bit
-    r3 :: str
-    r4 :: object
-    r5 :: object_ptr
-    r6 :: object_ptr[1]
-    r7 :: c_ptr
-    r8 :: native_int[1]
-    r9 :: c_ptr
-    r10 :: object
-    r11 :: dict
-    r12, r13 :: str
-    r14 :: bit
-    r15 :: object
-    r16 :: str
-    r17 :: dict
-    r18, r19 :: object
-    r20 :: str
-    r21 :: object
-    r22 :: dict
-    r23 :: str
-    r24 :: i32
-    r25 :: bit
-    r26 :: None
-L0:
-    r0 = builtins :: module
-    r1 = load_address _Py_NoneStruct
-    r2 = r0 != r1
-    if r2 goto L3 else goto L1 :: bool
-L1:
-    r3 = 'builtins'
-    r4 = PyImport_Import(r3)
-    if is_error(r4) goto L8 (error at <module>:-1) else goto L2
-L2:
-    builtins = r4 :: module
-    dec_ref r4
-L3:
-    r5 = load_address binascii :: module
-    r6 = [r5]
-    r7 = load_address r6
-    r8 = [1]
-    r9 = load_address r8
-    r10 = (('binascii', 'binascii', 'binascii'),)
-    r11 = faster_hexbytes._utils.globals :: static
-    r12 = 'faster_hexbytes/_utils.py'
-    r13 = '<module>'
-    r14 = CPyImport_ImportMany(r10, r7, r11, r12, r13, r9)
-    if not r14 goto L8 else goto L4 :: bool
-L4:
-    r15 = ('Final', 'Union')
-    r16 = 'typing'
-    r17 = faster_hexbytes._utils.globals :: static
-    r18 = CPyImport_ImportFromMany(r16, r15, r15, r17)
-    if is_error(r18) goto L8 (error at <module>:2) else goto L5
-L5:
-    typing = r18 :: module
-    dec_ref r18
-    r19 = binascii :: module
-    r20 = 'unhexlify'
-    r21 = CPyObject_GetAttr(r19, r20)
-    if is_error(r21) goto L8 (error at <module>:8) else goto L6
-L6:
-    faster_hexbytes._utils.unhexlify = r21 :: static
-    r22 = faster_hexbytes._utils.globals :: static
-    r23 = 'unhexlify'
-    r24 = CPyDict_SetItem(r22, r23, r21)
-    dec_ref r21
-    r25 = r24 >= 0 :: signed
-    if not r25 goto L8 (error at <module>:8) else goto L7 :: bool
-L7:
-    return 1
-L8:
-    r26 = <error> :: None
-    return r26

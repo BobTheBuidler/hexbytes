@@ -1,5 +1,6 @@
 from typing import (
     TYPE_CHECKING,
+    Any,
     Callable,
     Final,
     Tuple,
@@ -47,7 +48,8 @@ class HexBytes(hexbytes.HexBytes):
 
     def __new__(cls, val: BytesLike) -> Self:
         bytesval = to_bytes(val)
-        return _bytes_new(cls, bytesval)
+        obj: Any = _bytes_new(cls, bytesval)
+        return obj
 
     @overload
     def __getitem__(self, key: "SupportsIndex") -> int:  # noqa: F811

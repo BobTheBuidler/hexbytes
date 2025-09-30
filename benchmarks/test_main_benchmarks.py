@@ -30,7 +30,7 @@ def test_faster_hexbytes_new(benchmark: BenchmarkFixture, val: Any) -> None:
 @pytest.mark.parametrize("idx", [0, 1, 2, 3, 4, 5, -1])
 def test_hexbytes_getitem_index(benchmark: BenchmarkFixture, val: bytes, idx: int) -> None:
     obj = hexbytes.HexBytes(val)
-    if len(val) <= abs(idx):
+    if len(val) > abs(idx):
         benchmark(run_100, lambda: obj[idx])
 
 @pytest.mark.benchmark(group="HexBytes.__getitem__ (index)")

@@ -89,5 +89,6 @@ class HexBytes(hexbytes.HexBytes):
         return _bytes_new, (type(self), bytes(self))
 
 
+@mypyc_attr(native_class=False)
 class _HexBytesSubclassHelper(HexBytes):
     ...  # trying something

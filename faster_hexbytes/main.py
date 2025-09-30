@@ -26,7 +26,7 @@ if TYPE_CHECKING:
 BytesLike = Union[bool, bytearray, bytes, int, str, memoryview]
 
 
-@mypy_extensions.mypyc_attr(native_class=False)
+@mypyc_attr(native_class=False)
 class HexBytes(bytes):
     """
     Thin wrapper around the python built-in :class:`bytes` class.

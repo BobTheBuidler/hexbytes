@@ -1,14 +1,25 @@
 from typing import (
     TYPE_CHECKING,
     Callable,
+    Final,
     Tuple,
     Type,
     Union,
-    cast,
     overload,
 )
 
-from ._utils import (
+# accessing hexbytes.HexBytes after `import hexbytes`
+# fails because mypyc tries to lookup HexBytes from
+# CPyModule_hexbytes___main which was never imported
+import hexbytes.main as hexbytes
+from mypy_extensions import (
+    mypyc_attr,
+)
+from typing_extensions import (
+    Self,
+)
+
+from faster_hexbytes._utils import (
     to_bytes,
 )
 
@@ -17,10 +28,13 @@ if TYPE_CHECKING:
         SupportsIndex,
     )
 
-BytesLike = Union[bool, bytearray, bytes, int, str, memoryview]
+BytesLike = Union[bytes, str, bool, bytearray, int, memoryview]
+
+_bytes_new: Final = bytes.__new__
 
 
-class HexBytes(bytes):
+@mypyc_attr(native_class=False)
+class HexBytes(hexbytes.HexBytes):
     """
     Thin wrapper around the python built-in :class:`bytes` class.
 
@@ -31,26 +45,29 @@ class HexBytes(bytes):
         3. ``to_0x_hex`` returns a 0x-prefixed hex string
     """
 
-    def __new__(cls: Type[bytes], val: BytesLike) -> "HexBytes":
+    def __new__(cls, val: BytesLike) -> Self:
         bytesval = to_bytes(val)
-        return cast(HexBytes, super().__new__(cls, bytesval))  # type: ignore  # https://github.com/python/typeshed/issues/2630  # noqa: E501
+        return _bytes_new(cls, bytesval)
 
     @overload
     def __getitem__(self, key: "SupportsIndex") -> int:  # noqa: F811
         ...
 
     @overload  # noqa: F811
-    def __getitem__(self, key: slice) -> "HexBytes":  # noqa: F811
+    def __getitem__(self, key: slice) -> Self:  # noqa: F811
         ...
 
     def __getitem__(  # noqa: F811
         self, key: Union["SupportsIndex", slice]
-    ) -> Union[int, bytes, "HexBytes"]:
-        result = super().__getitem__(key)
-        if hasattr(result, "hex"):
-            return type(self)(result)
-        else:
+    ) -> Union[int, Self]:
+        result = bytes.__getitem__(self, key)
+        if isinstance(result, int):
             return result
+        cls = type(self)
+        if cls is HexBytes:
+            # fast-path case with faster C code for non-subclass
+            return HexBytes(result)  # type: ignore [return-value]
+        return cls(result)
 
     def __repr__(self) -> str:
         return f"HexBytes({'0x' + self.hex()!r})"
@@ -59,7 +76,7 @@ class HexBytes(bytes):
         """
         Convert the bytes to a 0x-prefixed hex string
         """
-        return "0x" + self.hex()
+        return f"0x{self.hex()}"
 
     def __reduce__(
         self,
@@ -69,4 +86,4 @@ class HexBytes(bytes):
         ``HexBytes.__new__`` since an existing HexBytes instance has already been
         validated when created.
         """
-        return bytes.__new__, (type(self), bytes(self))
+        return _bytes_new, (type(self), bytes(self))

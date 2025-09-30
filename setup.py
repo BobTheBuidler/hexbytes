@@ -1,8 +1,13 @@
 #!/usr/bin/env python
+import sys
 from setuptools import (
     find_packages,
     setup,
 )
+from mypyc.build import mypycify
+
+
+version = "1.3.1"
 
 extras_require = {
     "dev": [
@@ -38,26 +43,43 @@ with open("./README.md") as readme:
     long_description = readme.read()
 
 
+if sys.version_info >= (3, 9):
+    ext_modules = mypycify(["faster_hexbytes/", "--strict", "--pretty"])
+else:
+    # we can't compile on python3.8 but we can still let the user install
+    ext_modules = []
+
+
 setup(
-    name="hexbytes",
+    name="faster_hexbytes",
     # *IMPORTANT*: Don't manually change the version here. See Contributing docs for the release process.
-    version="1.3.1",
-    description="""hexbytes: Python `bytes` subclass that decodes hex, with a readable console output""",
+    version=version,
+    description="""A faster fork of hexbytes: Python `bytes` subclass that decodes hex, with a readable console output. Implemented in C.""",
     long_description=long_description,
     long_description_content_type="text/markdown",
     author="The Ethereum Foundation",
     author_email="snakecharmers@ethereum.org",
     url="https://github.com/ethereum/hexbytes",
     include_package_data=True,
-    install_requires=[],
-    python_requires=">=3.8, <4",
+    install_requires=[f"hexbytes=={version}", "mypy_extensions"],
+    python_requires=">=3.9, <4",
     extras_require=extras_require,
-    py_modules=["hexbytes"],
+    py_modules=["faster_hexbytes"],
     license="MIT",
     zip_safe=False,
     keywords="ethereum",
-    packages=find_packages(exclude=["scripts", "scripts.*", "tests", "tests.*"]),
-    package_data={"hexbytes": ["py.typed"]},
+    packages=find_packages(
+        exclude=[
+            "scripts",
+            "scripts.*",
+            "tests",
+            "tests.*",
+            "benchmarks",
+            "benchmarks.*",
+        ]
+    ),
+    ext_modules=ext_modules,
+    package_data={"faster_hexbytes": ["py.typed"]},
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
@@ -70,5 +92,6 @@ setup(
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
         "Programming Language :: Python :: 3.13",
+        "Programming Language :: Python :: 3.14",
     ],
 )

@@ -1,4 +1,4 @@
 def test_import_and_version():
-    import hexbytes
+    import faster_hexbytes
 
-    assert isinstance(hexbytes.__version__, str)
+    assert isinstance(faster_hexbytes.__version__, str)

@@ -8,7 +8,10 @@ from typing import (
     overload,
 )
 
-import hexbytes
+# accessing hexbytes.HexBytes after `import hexbytes`
+# fails because mypyc tries to lookup HexBytes from
+# CPyModule_hexbytes___main which was never imported
+import hexbytes.main as hexbytes
 from mypy_extensions import (
     mypyc_attr,
 )

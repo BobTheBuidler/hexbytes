@@ -2,7 +2,7 @@ from importlib.metadata import (
     version as __version,
 )
 
-from .main import (
+from faster_hexbytes.main import (
     HexBytes,
 )
 

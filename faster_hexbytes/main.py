@@ -28,6 +28,9 @@ if TYPE_CHECKING:
         SupportsIndex,
     )
 
+    from faster_hexbytes._helper import _SubclassHelper
+
+
 BytesLike = Union[bytes, str, bool, bytearray, int, memoryview]
 
 _bytes_new: Final = bytes.__new__

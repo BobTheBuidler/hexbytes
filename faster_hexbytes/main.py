@@ -63,7 +63,7 @@ class HexBytes(hexbytes.HexBytes):
         cls = type(self)
         if cls is HexBytes:
             # fast-path case with faster C code for non-subclass
-            return HexBytes(result)
+            return HexBytes(result)  # type: ignore [return-value]
         return cls(result)
 
     def __repr__(self) -> str:

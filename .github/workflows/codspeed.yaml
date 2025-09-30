@@ -24,8 +24,9 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install .[dev]
-          pip install pytest-codspeed hexbytes
+          pip install .[dev] pytest-codspeed
+      - name: Remove Python files from test env
+        run: rm -r faster_hexbytes
       - name: Run CodSpeed
         uses: CodSpeedHQ/action@v3
         with:

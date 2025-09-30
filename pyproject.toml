@@ -1,3 +1,7 @@
+[build-system]
+requires = ["setuptools", "wheel", "mypy[mypyc]>=1.14.1,<1.18.3"]
+build-backend = "setuptools.build_meta"
+
 [tool.autoflake]
 exclude = "__init__.py"
 remove_all_unused_imports = true

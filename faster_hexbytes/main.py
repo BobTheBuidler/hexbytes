@@ -8,6 +8,13 @@ from typing import (
     overload,
 )
 
+from mypy_extensions import (
+    mypyc_attr,
+)
+from typing_extensions import (
+    Self,
+)
+
 from ._utils import (
     to_bytes,
 )
@@ -20,6 +27,7 @@ if TYPE_CHECKING:
 BytesLike = Union[bool, bytearray, bytes, int, str, memoryview]
 
 
+@mypy_extensions.mypyc_attr(native_class=False)
 class HexBytes(bytes):
     """
     Thin wrapper around the python built-in :class:`bytes` class.
@@ -31,9 +39,9 @@ class HexBytes(bytes):
         3. ``to_0x_hex`` returns a 0x-prefixed hex string
     """
 
-    def __new__(cls: Type[bytes], val: BytesLike) -> "HexBytes":
+    def __new__(cls, val: BytesLike) -> Self:
         bytesval = to_bytes(val)
-        return cast(HexBytes, super().__new__(cls, bytesval))  # type: ignore  # https://github.com/python/typeshed/issues/2630  # noqa: E501
+        return super().__new__(cls, bytesval)
 
     @overload
     def __getitem__(self, key: "SupportsIndex") -> int:  # noqa: F811

@@ -44,7 +44,7 @@ with open("./README.md") as readme:
 
 
 if sys.version_info >= (3, 9):
-    ext_modules = mypycify(["faster_hexbytes/__init__.py", "faster_hexbytes/main.py", "faster_hexbytes/_utils.py", "--strict", "--pretty"])
+    ext_modules = mypycify(["faster_hexbytes/", "--strict", "--pretty"])
 else:
     # we can't compile on python3.8 but we can still let the user install
     ext_modules = []

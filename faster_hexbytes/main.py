@@ -4,6 +4,7 @@ from typing import (
     Final,
     Tuple,
     Type,
+    TypeVar,
     Union,
     overload,
 )
@@ -30,6 +31,8 @@ if TYPE_CHECKING:
 
 BytesLike = Union[bytes, str, bool, bytearray, int, memoryview]
 
+HexBytesOrSubclass = TypeVar("HexBytesOrSubclass", bound="HexBytes")
+
 _bytes_new: Final = bytes.__new__
 
 
@@ -45,7 +48,7 @@ class HexBytes(hexbytes.HexBytes):
         3. ``to_0x_hex`` returns a 0x-prefixed hex string
     """
 
-    def __new__(cls, val: BytesLike) -> Self:
+    def __new__(cls: Type[HexBytesOrSubclass], val: BytesLike) -> HexBytesOrSubclass:
         bytesval = to_bytes(val)
         return _bytes_new(cls, bytesval)
 

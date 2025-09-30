@@ -10,19 +10,16 @@ on:
 
 jobs:
   test:
-    name: Test (tox ${{ matrix.toxenv }})
+    name: Test (${{ matrix.jobtype }}, ${{ matrix.python-version}}, ${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
         python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
-        toxenv:
-          - core
-          - lint
-          - wheel
+        jobtype: [core, lint, wheel]
     env:
-      TOXENV: py${{ matrix.python-version }}-${{ matrix.toxenv }}
+      TOXENV: py${{ matrix.python-version }}-${{ matrix.jobtype }}
     steps:
       - uses: actions/checkout@v4
 
@@ -44,7 +41,7 @@ jobs:
             .hypothesis
             ~/.cache/pip
             ~/.local
-          key: ${{ runner.os }}-tox-${{ matrix.python-version }}-${{ matrix.toxenv }}-${{ hashFiles('setup.py', 'tox.ini') }}
+          key: ${{ runner.os }}-tox-${{ matrix.python-version }}-${{ matrix.jobtype }}-${{ hashFiles('setup.py', 'tox.ini') }}
 
       - name: Run tox
         run: python -m tox run -r

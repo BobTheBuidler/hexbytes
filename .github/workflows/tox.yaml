@@ -10,7 +10,7 @@ on:
 
 jobs:
   test:
-    name: Test (tox core, lint, wheel)
+    name: Test (tox ${{ matrix.toxenv }})
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false

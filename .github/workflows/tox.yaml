@@ -21,22 +21,6 @@ jobs:
           - core
           - lint
           - wheel
-        exclude:
-          # Only run wheel jobs on windows for 3.11, 3.12, 3.13
-          - os: windows-latest
-            python-version: 3.8
-            toxenv: wheel
-          - os: windows-latest
-            python-version: 3.9
-            toxenv: wheel
-          - os: windows-latest
-            python-version: 3.10
-            toxenv: wheel
-          # Only run core and lint jobs on ubuntu
-          - os: windows-latest
-            toxenv: core
-          - os: windows-latest
-            toxenv: lint
     env:
       TOXENV: py${{ matrix.python-version }}-${{ matrix.toxenv }}
     steps:

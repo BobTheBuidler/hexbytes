@@ -28,8 +28,6 @@ if TYPE_CHECKING:
         SupportsIndex,
     )
 
-    from faster_hexbytes._helper import _SubclassHelper
-
 
 BytesLike = Union[bytes, str, bool, bytearray, int, memoryview]
 
@@ -92,6 +90,12 @@ class HexBytes(hexbytes.HexBytes):
         return _bytes_new, (type(self), bytes(self))
 
 
+# these 3 helpers serve as a workaround for a mypyc bug until
+# https://github.com/python/mypy/pull/19957 is merged and released
+
 @mypyc_attr(native_class=False)
-class _HexBytesSubclassHelper(HexBytes):
-    ...  # trying something
+class _HexBytesSubclass1(HexBytes): ...
+@mypyc_attr(native_class=False)
+class _HexBytesSubclass2(HexBytes): ...
+@mypyc_attr(native_class=False)
+class _HexBytesSubclass3(HexBytes): ...

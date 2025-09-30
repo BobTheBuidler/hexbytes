@@ -87,3 +87,7 @@ class HexBytes(hexbytes.HexBytes):
         validated when created.
         """
         return _bytes_new, (type(self), bytes(self))
+
+
+class _HexBytesSubclassHelper(HexBytes):
+    ...  # trying something

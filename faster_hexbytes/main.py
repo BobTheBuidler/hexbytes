@@ -70,7 +70,7 @@ class HexBytes(hexbytes.HexBytes):
         return cls(result)
 
     def __repr__(self) -> str:
-        return f"HexBytes({'0x' + self.hex()!r})"
+        return f"HexBytes('0x{self.hex()}')"
 
     def to_0x_hex(self) -> str:
         """

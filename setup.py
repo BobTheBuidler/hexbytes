@@ -6,6 +6,9 @@ from setuptools import (
 )
 from mypyc.build import mypycify
 
+
+version = "1.3.1"
+
 extras_require = {
     "dev": [
         "build>=0.9.0",
@@ -46,10 +49,11 @@ else:
     # we can't compile on python3.8 but we can still let the user install
     ext_modules = []
 
+
 setup(
     name="faster_hexbytes",
     # *IMPORTANT*: Don't manually change the version here. See Contributing docs for the release process.
-    version="1.3.1",
+    version=version,
     description="""A faster fork of hexbytes: Python `bytes` subclass that decodes hex, with a readable console output. Implemented in C.""",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -57,7 +61,7 @@ setup(
     author_email="snakecharmers@ethereum.org",
     url="https://github.com/ethereum/hexbytes",
     include_package_data=True,
-    install_requires=[],
+    install_requires=[f"hexbytes=={version}"],
     python_requires=">=3.8, <4",
     extras_require=extras_require,
     py_modules=["faster_hexbytes"],

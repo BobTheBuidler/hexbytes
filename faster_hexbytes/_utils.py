@@ -1,10 +1,14 @@
 import binascii
 from typing import (
+    Final,
     Union,
 )
 
 
-def to_bytes(val: Union[bool, bytearray, bytes, int, str, memoryview]) -> bytes:
+unhexlify: Final = binascii.unhexlify
+
+
+def to_bytes(val: Union[bytes, str, bytearray, bool, int, memoryview]) -> bytes:
     """
     Equivalent to: `eth_utils.hexstr_if_str(eth_utils.to_bytes, val)` .
 
@@ -51,4 +55,4 @@ def hexstr_to_bytes(hexstr: str) -> bytes:
             f"hex string {padded_hex} may only contain [0-9a-fA-F] characters"
         )
     else:
-        return binascii.unhexlify(ascii_hex)
+        return unhexlify(ascii_hex)

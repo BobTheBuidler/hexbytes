@@ -33,7 +33,10 @@ BytesLike = Union[bytes, str, bool, bytearray, int, memoryview]
 _bytes_new: Final = bytes.__new__
 
 
-@mypyc_attr(native_class=False)
+@mypyc_attr(
+    native_class=False,
+    allow_interpreted_subclasses=True,
+)
 class HexBytes(hexbytes.HexBytes):
     """
     Thin wrapper around the python built-in :class:`bytes` class.

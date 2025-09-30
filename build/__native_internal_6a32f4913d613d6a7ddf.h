@@ -6,7 +6,7 @@
 
 int CPyGlobalsInit(void);
 
-extern PyObject *CPyStatics[82];
+extern PyObject *CPyStatics[87];
 extern const char * const CPyLit_Str[];
 extern const char * const CPyLit_Bytes[];
 extern const char * const CPyLit_Int[];
@@ -39,6 +39,9 @@ extern PyObject *CPyPy__utils___hexstr_to_bytes(PyObject *self, PyObject *const 
 extern char CPyDef__utils_____top_level__(void);
 extern PyObject *CPyStatic_main____bytes_new;
 extern PyTypeObject *CPyType_main___HexBytes;
+extern PyTypeObject *CPyType_main____HexBytesSubclass1;
+extern PyTypeObject *CPyType_main____HexBytesSubclass2;
+extern PyTypeObject *CPyType_main____HexBytesSubclass3;
 extern PyTypeObject *CPyType_main_____new___3_HexBytes_obj;
 extern PyObject *CPyDef_main_____new___3_HexBytes_obj(void);
 extern CPyThreadLocal faster_hexbytes___main_____new___3_HexBytes_objObject *main_____new___3_HexBytes_obj_free_instance;

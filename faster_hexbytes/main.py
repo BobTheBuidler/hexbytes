@@ -28,12 +28,13 @@ if TYPE_CHECKING:
         SupportsIndex,
     )
 
+
 BytesLike = Union[bytes, str, bool, bytearray, int, memoryview]
 
 _bytes_new: Final = bytes.__new__
 
 
-@mypyc_attr(native_class=False)
+@mypyc_attr(native_class=False, allow_interpreted_subclasses=True)
 class HexBytes(hexbytes.HexBytes):
     """
     Thin wrapper around the python built-in :class:`bytes` class.
@@ -87,3 +88,14 @@ class HexBytes(hexbytes.HexBytes):
         validated when created.
         """
         return _bytes_new, (type(self), bytes(self))
+
+
+# these 3 helpers serve as a workaround for a mypyc bug until
+# https://github.com/python/mypy/pull/19957 is merged and released
+
+@mypyc_attr(native_class=False)
+class _HexBytesSubclass1(HexBytes): ...
+@mypyc_attr(native_class=False)
+class _HexBytesSubclass2(HexBytes): ...
+@mypyc_attr(native_class=False)
+class _HexBytesSubclass3(HexBytes): ...

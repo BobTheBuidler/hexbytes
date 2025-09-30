@@ -40,7 +40,7 @@ class HexBytes(bytes):
 
     def __new__(cls, val: BytesLike) -> Self:
         bytesval = to_bytes(val)
-        return super().__new__(cls, bytesval)
+        return bytes.__new__(cls, bytesval)
 
     @overload
     def __getitem__(self, key: "SupportsIndex") -> int:  # noqa: F811

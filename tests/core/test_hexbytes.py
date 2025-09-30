@@ -11,7 +11,7 @@ from hypothesis import (
     strategies as st,
 )
 
-from hexbytes import (
+from faster_hexbytes import (
     HexBytes,
 )
 

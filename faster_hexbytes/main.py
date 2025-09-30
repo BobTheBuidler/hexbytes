@@ -48,8 +48,10 @@ class HexBytes(hexbytes.HexBytes):
 
     def __new__(cls, val: BytesLike) -> Self:
         bytesval = to_bytes(val)
+        # this is a workaround for a mypyc bug, the compiler
+        # expects an exact HexBytes instance, not a subclass
         obj: Any = _bytes_new(cls, bytesval)
-        return obj
+        return obj  # type: ignore [no-any-return]
 
     @overload
     def __getitem__(self, key: "SupportsIndex") -> int:  # noqa: F811

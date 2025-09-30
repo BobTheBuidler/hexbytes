@@ -1,0 +1,3 @@
+from faster_hexbytes import HexBytes
+
+class _SubclassHelper(HexBytes):...

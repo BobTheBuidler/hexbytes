@@ -70,3 +70,7 @@ class HexBytes(bytes):
         validated when created.
         """
         return bytes.__new__, (type(self), bytes(self))
+
+
+class _HexBytesSubclassHelper(HexBytes):
+    ...  # trying something

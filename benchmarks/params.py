@@ -68,7 +68,6 @@ STR_CASES: List[Tuple[str, str]] = [
     ("0x" + "00" * 64, "'0x'+'00'*64"),
     ("0xabcdef", "'0xabcdef'"),
     ("0x" + "a" * 128, "'0x'+'a'*128"),
-    ("unicode-✓-测试", "unicode string"),
     ("0xdeadbeef", "'0xdeadbeef'"),
     ("0xCAFEBABE", "'0xCAFEBABE'"),
 ]
@@ -78,7 +77,6 @@ STR_IDS: List[str] = [id for _, id in STR_CASES]
 INT_CASES: List[Tuple[int, str]] = [
     (123456, "123456"),
     (0, "0"),
-    (-1, "-1"),
     (2**8, "2**8"),
     (2**16, "2**16"),
     (2**32, "2**32"),

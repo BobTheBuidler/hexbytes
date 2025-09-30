@@ -45,9 +45,13 @@ def compare_group(group_results: Dict[str, Any]) -> Dict[str, Any]:
     if ref and fast:
         mean_ref = ref["mean"]
         mean_fast = fast["mean"]
-        percent_change = ((mean_ref - mean_fast) / mean_ref) * 100 if mean_ref != 0 else 0.0
-        speedup_x = mean_ref / mean_fast if mean_fast != 0 else float('inf')
-        speedup_percent = (speedup_x - 1) * 100 if speedup_x != float('inf') else float('inf')
+        percent_change = (
+            ((mean_ref - mean_fast) / mean_ref) * 100 if mean_ref != 0 else 0.0
+        )
+        speedup_x = mean_ref / mean_fast if mean_fast != 0 else float("inf")
+        speedup_percent = (
+            (speedup_x - 1) * 100 if speedup_x != float("inf") else float("inf")
+        )
         return {
             "reference_mean": mean_ref,
             "faster_mean": mean_fast,

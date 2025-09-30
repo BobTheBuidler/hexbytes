@@ -42,8 +42,10 @@ BYTES_CASES: List[Tuple[bytes, str]] = [
 BYTES_VALS: List[bytes] = [v for v, _ in BYTES_CASES]
 BYTES_IDS: List[str] = [id for _, id in BYTES_CASES]
 
+
 def variant_ids(base_ids: List[str], prefix: str) -> List[str]:
     return [f"{prefix}({id})" for id in base_ids]
+
 
 BYTEARRAYS = [bytearray(b) for b in BYTES_VALS]
 BYTEARRAYS_IDS = variant_ids(BYTES_IDS, "bytearray")

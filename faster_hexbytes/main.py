@@ -16,7 +16,7 @@ from typing_extensions import (
     Self,
 )
 
-from ._utils import (
+from faster_hexbytes._utils import (
     to_bytes,
 )
 
@@ -51,17 +51,20 @@ class HexBytes(hexbytes.HexBytes):
         ...
 
     @overload  # noqa: F811
-    def __getitem__(self, key: slice) -> "HexBytes":  # noqa: F811
+    def __getitem__(self, key: slice) -> Self:  # noqa: F811
         ...
 
     def __getitem__(  # noqa: F811
         self, key: Union["SupportsIndex", slice]
-    ) -> Union[int, bytes, "HexBytes"]:
+    ) -> Union[int, Self]:
         result = bytes.__getitem__(self, key)
-        if hasattr(result, "hex"):
-            return type(self)(result)
-        else:
+        if isinstance(result, int):
             return result
+        cls = type(self)
+        if cls is HexBytes:
+            # fast-path case with faster C code for non-subclass
+            return HexBytes(result)
+        return cls(result)
 
     def __repr__(self) -> str:
         return f"HexBytes({'0x' + self.hex()!r})"

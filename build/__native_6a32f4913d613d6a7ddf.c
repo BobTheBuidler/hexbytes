@@ -2045,97 +2045,38 @@ fail: ;
 PyObject *CPyDef_main_____repr___3_HexBytes_obj_____call__(PyObject *cpy_r___mypyc_self__, PyObject *cpy_r_self) {
     PyObject *cpy_r_r0;
     PyObject *cpy_r_r1;
-    PyObject *cpy_r_r2;
-    PyObject *cpy_r_r3;
+    PyObject **cpy_r_r3;
     PyObject *cpy_r_r4;
-    PyObject **cpy_r_r6;
+    PyObject *cpy_r_r5;
+    PyObject *cpy_r_r6;
     PyObject *cpy_r_r7;
     PyObject *cpy_r_r8;
-    PyObject *cpy_r_r9;
-    PyObject *cpy_r_r10;
-    PyObject *cpy_r_r11;
-    PyObject **cpy_r_r13;
-    PyObject *cpy_r_r14;
-    PyObject *cpy_r_r15;
-    PyObject *cpy_r_r16;
-    PyObject *cpy_r_r17;
-    CPyPtr cpy_r_r18;
-    CPyPtr cpy_r_r19;
-    CPyPtr cpy_r_r20;
-    CPyPtr cpy_r_r21;
-    PyObject *cpy_r_r22;
-    PyObject *cpy_r_r23;
-    cpy_r_r0 = CPyStatics[17]; /* '' */
-    cpy_r_r1 = CPyStatics[38]; /* 'HexBytes(' */
-    cpy_r_r2 = CPyStatics[19]; /* '{!r:{}}' */
-    cpy_r_r3 = CPyStatics[24]; /* '0x' */
-    cpy_r_r4 = CPyStatics[15]; /* 'hex' */
-    PyObject *cpy_r_r5[1] = {cpy_r_self};
-    cpy_r_r6 = (PyObject **)&cpy_r_r5;
-    cpy_r_r7 = PyObject_VectorcallMethod(cpy_r_r4, cpy_r_r6, 9223372036854775809ULL, 0);
+    cpy_r_r0 = CPyStatics[38]; /* "HexBytes('0x" */
+    cpy_r_r1 = CPyStatics[15]; /* 'hex' */
+    PyObject *cpy_r_r2[1] = {cpy_r_self};
+    cpy_r_r3 = (PyObject **)&cpy_r_r2;
+    cpy_r_r4 = PyObject_VectorcallMethod(cpy_r_r1, cpy_r_r3, 9223372036854775809ULL, 0);
+    if (unlikely(cpy_r_r4 == NULL)) {
+        CPy_AddTraceback("faster_hexbytes/main.py", "__repr__", 73, CPyStatic_main___globals);
+        goto CPyL4;
+    }
+    if (likely(PyUnicode_Check(cpy_r_r4)))
+        cpy_r_r5 = cpy_r_r4;
+    else {
+        CPy_TypeErrorTraceback("faster_hexbytes/main.py", "__repr__", 73, CPyStatic_main___globals, "str", cpy_r_r4);
+        goto CPyL4;
+    }
+    cpy_r_r6 = CPyStatics[39]; /* "')" */
+    cpy_r_r7 = CPyStr_Build(3, cpy_r_r0, cpy_r_r5, cpy_r_r6);
+    CPy_DECREF(cpy_r_r5);
     if (unlikely(cpy_r_r7 == NULL)) {
         CPy_AddTraceback("faster_hexbytes/main.py", "__repr__", 73, CPyStatic_main___globals);
-        goto CPyL8;
+        goto CPyL4;
     }
-    if (likely(PyUnicode_Check(cpy_r_r7)))
-        cpy_r_r8 = cpy_r_r7;
-    else {
-        CPy_TypeErrorTraceback("faster_hexbytes/main.py", "__repr__", 73, CPyStatic_main___globals, "str", cpy_r_r7);
-        goto CPyL8;
-    }
-    cpy_r_r9 = PyUnicode_Concat(cpy_r_r3, cpy_r_r8);
-    CPy_DECREF(cpy_r_r8);
-    if (unlikely(cpy_r_r9 == NULL)) {
-        CPy_AddTraceback("faster_hexbytes/main.py", "__repr__", 73, CPyStatic_main___globals);
-        goto CPyL8;
-    }
-    cpy_r_r10 = CPyStatics[17]; /* '' */
-    cpy_r_r11 = CPyStatics[20]; /* 'format' */
-    PyObject *cpy_r_r12[3] = {cpy_r_r2, cpy_r_r9, cpy_r_r10};
-    cpy_r_r13 = (PyObject **)&cpy_r_r12;
-    cpy_r_r14 = PyObject_VectorcallMethod(cpy_r_r11, cpy_r_r13, 9223372036854775811ULL, 0);
-    if (unlikely(cpy_r_r14 == NULL)) {
-        CPy_AddTraceback("faster_hexbytes/main.py", "__repr__", 73, CPyStatic_main___globals);
-        goto CPyL9;
-    }
-    CPy_DECREF(cpy_r_r9);
-    if (likely(PyUnicode_Check(cpy_r_r14)))
-        cpy_r_r15 = cpy_r_r14;
-    else {
-        CPy_TypeErrorTraceback("faster_hexbytes/main.py", "__repr__", 73, CPyStatic_main___globals, "str", cpy_r_r14);
-        goto CPyL8;
-    }
-    cpy_r_r16 = CPyStatics[39]; /* ')' */
-    cpy_r_r17 = PyList_New(3);
-    if (unlikely(cpy_r_r17 == NULL)) {
-        CPy_AddTraceback("faster_hexbytes/main.py", "__repr__", 73, CPyStatic_main___globals);
-        goto CPyL10;
-    }
-    cpy_r_r18 = (CPyPtr)&((PyListObject *)cpy_r_r17)->ob_item;
-    cpy_r_r19 = *(CPyPtr *)cpy_r_r18;
-    CPy_INCREF(cpy_r_r1);
-    *(PyObject * *)cpy_r_r19 = cpy_r_r1;
-    cpy_r_r20 = cpy_r_r19 + 8;
-    *(PyObject * *)cpy_r_r20 = cpy_r_r15;
-    CPy_INCREF(cpy_r_r16);
-    cpy_r_r21 = cpy_r_r19 + 16;
-    *(PyObject * *)cpy_r_r21 = cpy_r_r16;
-    cpy_r_r22 = PyUnicode_Join(cpy_r_r0, cpy_r_r17);
-    CPy_DECREF_NO_IMM(cpy_r_r17);
-    if (unlikely(cpy_r_r22 == NULL)) {
-        CPy_AddTraceback("faster_hexbytes/main.py", "__repr__", 73, CPyStatic_main___globals);
-        goto CPyL8;
-    }
-    return cpy_r_r22;
-CPyL8: ;
-    cpy_r_r23 = NULL;
-    return cpy_r_r23;
-CPyL9: ;
-    CPy_DecRef(cpy_r_r9);
-    goto CPyL8;
-CPyL10: ;
-    CPy_DecRef(cpy_r_r15);
-    goto CPyL8;
+    return cpy_r_r7;
+CPyL4: ;
+    cpy_r_r8 = NULL;
+    return cpy_r_r8;
 }
 
 PyObject *CPyPy_main_____repr___3_HexBytes_obj_____call__(PyObject *self, PyObject *const *args, size_t nargs, PyObject *kwnames) {
@@ -2949,11 +2890,12 @@ const char * const CPyLit_Str[] = {
     "\002\022UnicodeDecodeError\vhex string ",
     "\002( may only contain [0-9a-fA-F] characters\bbinascii",
     "\006\031faster_hexbytes/_utils.py\b<module>\005Final\005Union\006typing\tunhexlify",
-    "\b\v__getitem__\tHexBytes(\001)\rTYPE_CHECKING\bCallable\005Tuple\004Type\boverload",
-    "\005\rhexbytes.main\027faster_hexbytes/main.py\nmypyc_attr\017mypy_extensions\004Self",
-    "\005\021typing_extensions\bto_bytes\026faster_hexbytes._utils\tbytearray\tBytesLike",
-    "\006\a__new__\n_bytes_new\v__prepare__\fstaticmethod\b__repr__\tto_0x_hex",
-    "\005\n__reduce__\017__annotations__\026mypyc filler docstring\a__doc__\n__module__",
+    "\a\v__getitem__\fHexBytes(\'0x\002\')\rTYPE_CHECKING\bCallable\005Tuple\004Type",
+    "\004\boverload\rhexbytes.main\027faster_hexbytes/main.py\nmypyc_attr",
+    "\004\017mypy_extensions\004Self\021typing_extensions\bto_bytes",
+    "\005\026faster_hexbytes._utils\tbytearray\tBytesLike\a__new__\n_bytes_new",
+    "\005\v__prepare__\fstaticmethod\b__repr__\tto_0x_hex\n__reduce__",
+    "\004\017__annotations__\026mypyc filler docstring\a__doc__\n__module__",
     "\001\fnative_class",
     "",
 };

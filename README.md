@@ -10,7 +10,7 @@
 
 ##### We benchmark `faster-hexbytes` against the original `hexbytes` for your convenience. [See results](https://github.com/BobTheBuidler/faster-hexbytes/tree/master/benchmarks/results).
 
-##### The original eth-abi readme is below:
+##### The original hexbytes readme is below:
 
 # HexBytes
 

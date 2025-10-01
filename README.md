@@ -1,3 +1,17 @@
+### I forked hexbytes and compiled it to C. It does the same stuff, now faster
+
+[![PyPI](https://img.shields.io/pypi/v/faster-hexbytes.svg?logo=Python&logoColor=white)](https://pypi.org/project/faster-hexbytes/)
+[![Monthly Downloads](https://img.shields.io/pypi/dm/faster-hexbytes)](https://pypistats.org/packages/faster-hexbytes)
+[![Codspeed.io Status](https://img.shields.io/endpoint?url=https://codspeed.io/badge.json)](https://codspeed.io/BobTheBuidler/faster-hexbytes)
+
+##### This fork will be kept up-to-date with [hexbytes](https://github.com/ethereum/hexbytes). I will pull updates as they are released and push new [faster-hexbytes](https://github.com/BobTheBuidler/faster-hexbytes) releases to [PyPI](https://pypi.org/project/faster-hexbytes/).
+
+##### You can find the compiled C code on faster-hexbytes [master](https://github.com/BobTheBuidler/hexbytes/tree/master) branch.
+
+##### We benchmark `faster-hexbytes` against the original `hexbytes` for your convenience. [See results](https://github.com/BobTheBuidler/faster-hexbytes/tree/master/benchmarks/results).
+
+##### The original eth-abi readme is below:
+
 # HexBytes
 
 [![Join the conversation on Discord](https://img.shields.io/discord/809793915578089484?color=blue&label=chat&logo=discord&logoColor=white)](https://discord.gg/GHryRvPB84)

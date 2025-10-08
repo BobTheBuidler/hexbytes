@@ -5,9 +5,10 @@ on:
     branches: [main, master]
     paths:
       - '**.py'
-      - '.github/workflows/benchmark.yaml'
+      - '.github/workflows/tox.yaml'
       - 'pyproject.toml'
       - 'setup.py'
+      - 'tox.ini'
   pull_request:
     branches: [main, master]
     paths:

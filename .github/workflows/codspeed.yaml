@@ -42,6 +42,6 @@ jobs:
       - name: Remove Python files from test env
         run: rm -r faster_hexbytes
       - name: Run CodSpeed
-        uses: CodSpeedHQ/action@v3
+        uses: CodSpeedHQ/action@v4
         with:
           run: pytest --codspeed -k "test_faster_" benchmarks/

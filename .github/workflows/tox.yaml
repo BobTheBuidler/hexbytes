@@ -13,9 +13,10 @@ on:
     branches: [main, master]
     paths:
       - '**.py'
-      - '.github/workflows/benchmark.yaml'
+      - '.github/workflows/tox.yaml'
       - 'pyproject.toml'
       - 'setup.py'
+      - 'tox.ini'
   schedule:
     - cron: '0 10 * * *'  # Daily 10:00 UTC
   workflow_dispatch:

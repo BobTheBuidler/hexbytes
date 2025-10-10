@@ -45,7 +45,7 @@ jobs:
       TOX_RECREATE_FLAG: ${{ github.event_name == 'schedule' && '-r' || '' }}
       IS_UBUNTU_32BIT: ${{ matrix.os == 'ubuntu-latest' && matrix.architecture == 'x86' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       # Use i386/python Docker for all 32-bit Ubuntu jobs (TODO cache some of this)
       - name: Run job in 32-bit Ubuntu Docker container
@@ -78,7 +78,7 @@ jobs:
       # All other builds (64-bit Linux, 32-bit and 64-bit Windows)
       - name: Set up Python
         if: ${{ matrix.os != 'macos-latest' && env.IS_UBUNTU_32BIT != 'true' }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
           architecture: ${{ matrix.architecture }}

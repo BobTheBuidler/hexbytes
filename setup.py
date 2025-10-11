@@ -44,11 +44,16 @@ with open("./README.md") as readme:
     long_description = readme.read()
 
 
-if sys.version_info >= (3, 9):
-    ext_modules = mypycify(["faster_hexbytes/", "--strict", "--pretty"])
-else:
-    # we can't compile on python3.8 but we can still let the user install
+# we can't compile on python3.8 but we can still let the user install
+skip_mypyc = sys.version_info < (3, 9) or any(
+    cmd in sys.argv
+    for cmd in ("sdist", "egg_info", "--name", "--version", "--help", "--help-commands")
+)
+
+if skip_mypyc:
     ext_modules = []
+else:
+    ext_modules = mypycify(["faster_hexbytes/", "--strict", "--pretty"])
 
 
 setup(

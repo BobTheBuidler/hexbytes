@@ -110,9 +110,9 @@ jobs:
           key: ${{ env.CCACHE_KEY }}
           restore-keys: ccache-${{ runner.os }}-
       
-      - name: Install ccache and compiler
+      - name: Install ccache
         if: ${{ env.IS_UBUNTU_32BIT != 'true' }}
-        run: sudo apt-get update && sudo apt-get install -y ccache gcc
+        run: sudo apt-get update && sudo apt-get install -y ccache
 
       - name: Cache tox environment and hypothesis examples
         if: ${{ env.IS_UBUNTU_32BIT != 'true' }}

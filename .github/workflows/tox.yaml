@@ -44,6 +44,7 @@ jobs:
       TOXENV: py${{ matrix.python-version }}-${{ matrix.jobtype }}
       TOX_RECREATE_FLAG: ${{ github.event_name == 'schedule' && '-r' || '' }}
       IS_UBUNTU_32BIT: ${{ matrix.os == 'ubuntu-latest' && matrix.architecture == 'x86' }}
+      CCACHE_KEY: ccache-${{ runner.os }}-${{ hashFiles('**/*.h', '**/*.c', '**/*.py', 'pyproject.toml') }}
     steps:
       - uses: actions/checkout@v5
 
@@ -101,6 +102,18 @@ jobs:
           path: .mypy_cache
           key: mypy-cache-${{ runner.os }}-${{ matrix.architecture }}-${{ hashFiles('**/*.py', 'pyproject.toml') }}
 
+      - name: Restore ccache cache
+        if: ${{ env.IS_UBUNTU_32BIT != 'true' }}
+        uses: actions/cache/restore@v4
+        with:
+          path: ~/.ccache
+          key: ${{ env.CCACHE_KEY }}
+          restore-keys: ccache-${{ runner.os }}-
+      
+      - name: Install ccache and compiler
+        if: ${{ env.IS_UBUNTU_32BIT != 'true' }}
+        run: sudo apt-get update && sudo apt-get install -y ccache gcc
+
       - name: Cache tox environment and hypothesis examples
         if: ${{ env.IS_UBUNTU_32BIT != 'true' }}
         uses: actions/cache@v4
@@ -111,6 +124,21 @@ jobs:
           key: ${{ runner.os }}-tox-${{ hashFiles('pyproject.toml', 'setup.py', 'tox.ini') }}-${{ matrix.python-version }}-${{ matrix.architecture }}-${{ matrix.jobtype }}
           save-always: ${{ env.TOX_RECREATE_FLAG == '-r' }}
 
+      - name: Show ccache stats before build
+        if: ${{ env.IS_UBUNTU_32BIT != 'true' }}
+        run: ccache -s
+
       - name: Run tox
         if: ${{ env.IS_UBUNTU_32BIT != 'true' }}
         run: python -m tox run ${{ env.TOX_RECREATE_FLAG }}
+
+      - name: Show ccache stats after build
+        if: ${{ env.IS_UBUNTU_32BIT != 'true' }}
+        run: ccache -s
+
+      - name: Save ccache cache
+        uses: actions/cache/save@v4
+        if: ${{ env.IS_UBUNTU_32BIT != 'true' }}
+        with:
+          path: ~/.ccache
+          key: ${{ env.CCACHE_KEY }}

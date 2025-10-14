@@ -129,6 +129,8 @@ jobs:
 
       - name: Run tox
         if: ${{ env.IS_UBUNTU_32BIT != 'true' }}
+        env:
+          CC: ccache gcc
         run: python -m tox run ${{ env.TOX_RECREATE_FLAG }}
 
       - name: Show ccache stats after build

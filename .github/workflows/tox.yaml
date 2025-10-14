@@ -44,7 +44,6 @@ jobs:
       TOXENV: py${{ matrix.python-version }}-${{ matrix.jobtype }}
       TOX_RECREATE_FLAG: ${{ github.event_name == 'schedule' && '-r' || '' }}
       IS_UBUNTU_32BIT: ${{ matrix.os == 'ubuntu-latest' && matrix.architecture == 'x86' }}
-      CCACHE_KEY: ccache-${{ runner.os }}-${{ hashFiles('**/*.h', '**/*.c', '**/*.py', 'pyproject.toml') }}
     steps:
       - uses: actions/checkout@v5
 
@@ -107,8 +106,7 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: ~/.ccache
-          key: ${{ env.CCACHE_KEY }}
-          restore-keys: ccache-${{ runner.os }}-
+          key: ccache-${{ runner.os }}-${{ hashFiles('**/*.h', '**/*.c', '**/*.py', 'pyproject.toml') }}
       
       - name: Install ccache
         if: ${{ env.IS_UBUNTU_32BIT != 'true' }}
@@ -141,4 +139,4 @@ jobs:
         if: ${{ env.IS_UBUNTU_32BIT != 'true' }}
         with:
           path: ~/.ccache
-          key: ${{ env.CCACHE_KEY }}
+          key: ccache-${{ runner.os }}-${{ hashFiles('**/*.h', '**/*.c', '**/*.py', 'pyproject.toml') }}

@@ -16,8 +16,8 @@
 #include "misc_ops.c"
 #include "generic_ops.c"
 #include "pythonsupport.c"
-#include "__native_6a32f4913d613d6a7ddf.h"
-#include "__native_internal_6a32f4913d613d6a7ddf.h"
+#include "__native_faster_hexbytes.h"
+#include "__native_internal_faster_hexbytes.h"
 static PyMethodDef faster_hexbytesmodule_methods[] = {
     {NULL, NULL, 0, NULL}
 };
@@ -3543,14 +3543,14 @@ tuple_T2OT2OO CPyDef_main_____reduce___3_HexBytes_obj_____call__(PyObject *cpy_r
 PyObject *CPyPy_main_____reduce___3_HexBytes_obj_____call__(PyObject *self, PyObject *const *args, size_t nargs, PyObject *kwnames);
 char CPyDef_main_____top_level__(void);
 
-static int exec_6a32f4913d613d6a7ddf__mypyc(PyObject *module)
+static int exec_faster_hexbytes__mypyc(PyObject *module)
 {
     int res;
     PyObject *capsule;
     PyObject *tmp;
     
     extern PyObject *CPyInit_faster_hexbytes(void);
-    capsule = PyCapsule_New((void *)CPyInit_faster_hexbytes, "6a32f4913d613d6a7ddf__mypyc.init_faster_hexbytes", NULL);
+    capsule = PyCapsule_New((void *)CPyInit_faster_hexbytes, "faster_hexbytes__mypyc.init_faster_hexbytes", NULL);
     if (!capsule) {
         goto fail;
     }
@@ -3561,7 +3561,7 @@ static int exec_6a32f4913d613d6a7ddf__mypyc(PyObject *module)
     }
     
     extern PyObject *CPyInit_faster_hexbytes____utils(void);
-    capsule = PyCapsule_New((void *)CPyInit_faster_hexbytes____utils, "6a32f4913d613d6a7ddf__mypyc.init_faster_hexbytes____utils", NULL);
+    capsule = PyCapsule_New((void *)CPyInit_faster_hexbytes____utils, "faster_hexbytes__mypyc.init_faster_hexbytes____utils", NULL);
     if (!capsule) {
         goto fail;
     }
@@ -3572,7 +3572,7 @@ static int exec_6a32f4913d613d6a7ddf__mypyc(PyObject *module)
     }
     
     extern PyObject *CPyInit_faster_hexbytes___main(void);
-    capsule = PyCapsule_New((void *)CPyInit_faster_hexbytes___main, "6a32f4913d613d6a7ddf__mypyc.init_faster_hexbytes___main", NULL);
+    capsule = PyCapsule_New((void *)CPyInit_faster_hexbytes___main, "faster_hexbytes__mypyc.init_faster_hexbytes___main", NULL);
     if (!capsule) {
         goto fail;
     }
@@ -3586,24 +3586,24 @@ static int exec_6a32f4913d613d6a7ddf__mypyc(PyObject *module)
     fail:
     return -1;
 }
-static PyModuleDef module_def_6a32f4913d613d6a7ddf__mypyc = {
+static PyModuleDef module_def_faster_hexbytes__mypyc = {
     PyModuleDef_HEAD_INIT,
-    .m_name = "6a32f4913d613d6a7ddf__mypyc",
+    .m_name = "faster_hexbytes__mypyc",
     .m_doc = NULL,
     .m_size = -1,
     .m_methods = NULL,
 };
-PyMODINIT_FUNC PyInit_6a32f4913d613d6a7ddf__mypyc(void) {
+PyMODINIT_FUNC PyInit_faster_hexbytes__mypyc(void) {
     static PyObject *module = NULL;
     if (module) {
         Py_INCREF(module);
         return module;
     }
-    module = PyModule_Create(&module_def_6a32f4913d613d6a7ddf__mypyc);
+    module = PyModule_Create(&module_def_faster_hexbytes__mypyc);
     if (!module) {
         return NULL;
     }
-    if (exec_6a32f4913d613d6a7ddf__mypyc(module) < 0) {
+    if (exec_faster_hexbytes__mypyc(module) < 0) {
         Py_DECREF(module);
         return NULL;
     }

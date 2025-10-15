@@ -1,8 +1,8 @@
-#ifndef MYPYC_NATIVE_INTERNAL_6a32f4913d613d6a7ddf_H
-#define MYPYC_NATIVE_INTERNAL_6a32f4913d613d6a7ddf_H
+#ifndef MYPYC_NATIVE_INTERNAL_faster_hexbytes_H
+#define MYPYC_NATIVE_INTERNAL_faster_hexbytes_H
 #include <Python.h>
 #include <CPy.h>
-#include "__native_6a32f4913d613d6a7ddf.h"
+#include "__native_faster_hexbytes.h"
 
 int CPyGlobalsInit(void);
 

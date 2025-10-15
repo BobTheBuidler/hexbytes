@@ -4,11 +4,11 @@ PyMODINIT_FUNC
 PyInit_main(void)
 {
     PyObject *tmp;
-    if (!(tmp = PyImport_ImportModule("6a32f4913d613d6a7ddf__mypyc"))) return NULL;
+    if (!(tmp = PyImport_ImportModule("faster_hexbytes__mypyc"))) return NULL;
     PyObject *capsule = PyObject_GetAttrString(tmp, "init_faster_hexbytes___main");
     Py_DECREF(tmp);
     if (capsule == NULL) return NULL;
-    void *init_func = PyCapsule_GetPointer(capsule, "6a32f4913d613d6a7ddf__mypyc.init_faster_hexbytes___main");
+    void *init_func = PyCapsule_GetPointer(capsule, "faster_hexbytes__mypyc.init_faster_hexbytes___main");
     Py_DECREF(capsule);
     if (!init_func) {
         return NULL;

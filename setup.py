@@ -53,7 +53,7 @@ skip_mypyc = sys.version_info < (3, 9) or any(
 if skip_mypyc:
     ext_modules = []
 else:
-    ext_modules = mypycify(["faster_hexbytes/", "--strict", "--pretty"])
+    ext_modules = mypycify(["faster_hexbytes/", "--strict", "--pretty"], strict_dunder_typing=True)
 
 
 setup(

@@ -6,9 +6,13 @@
 
 ##### This fork will be kept up-to-date with [hexbytes](https://github.com/ethereum/hexbytes). I will pull updates as they are released and push new [faster-hexbytes](https://github.com/BobTheBuidler/faster-hexbytes) releases to [PyPI](https://pypi.org/project/faster-hexbytes/).
 
-##### You can find the compiled C code on faster-hexbytes [master](https://github.com/BobTheBuidler/hexbytes/tree/master) branch.
+##### `faster_hexbytes.HexBytes` inherits from `hexbytes.HexBytes`, so porting to `faster-hexbytes` does not require you to update any `isinstance` or `issubclass` checks. All such checks in your codebase, and in any dependencies, will continue to work as they did when originaly implemented.
 
 ##### We benchmark `faster-hexbytes` against the original `hexbytes` for your convenience. [See results](https://github.com/BobTheBuidler/faster-hexbytes/tree/master/benchmarks/results).
+
+##### You can find the compiled C code and header files in the [build](https://github.com/BobTheBuidler/hexbytes/tree/master/build) directory.
+
+###### You may also be interested in: [faster-web3.py](https://github.com/BobTheBuidler/faster-hexbytes/), [faster-eth-abi](https://github.com/BobTheBuidler/faster-eth-abi/), and [faster-eth-utils](https://github.com/BobTheBuidler/faster-eth-utils/)
 
 ##### The original hexbytes readme is below:
 
